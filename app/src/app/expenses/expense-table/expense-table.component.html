@@ -1,0 +1,25 @@
+<div  class="expense-table">
+    <table class="expense-table__table">
+        <thead class="expense-table__thead">
+          <tr class="expense-table__tr">
+            @for(header of _headerConstant; track header){
+                <th class="expense-table__th" scope="col">{{header.name}}</th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+            @for(table of expenses(); track table){
+                <tr  class="expense-table__tr expense-table--pointer" (click)="onEditExpense(table)">
+                    @for(header of _headerConstant; track header){
+                        @if(header.id === _updatedAtColumn) {
+                                <td class="expense-table__td">{{table[header.id].substring(0,10)}}</td>
+                        }@else {
+                                <td class="expense-table__td">{{table[header.id] || '-'}}</td>
+                        }
+                         
+                    }
+                </tr>
+            }
+           
+    </table>
+</div>

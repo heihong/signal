@@ -1,0 +1,22 @@
+.pagination {
+    display: flex;
+    align-items: center;
+    &__ul {
+        display: flex;
+        list-style-type: none;
+        align-items: center;
+        width: 480px;
+    }
+    &__button {
+        padding: 8px 16px;
+        border: none;
+        background: none;
+        cursor: pointer;
+    }
+    &__active {
+        background-color: blue;
+        button {
+            color: white;
+        }
+    }
+}

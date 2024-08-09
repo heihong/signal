@@ -1,0 +1,67 @@
+<form  [formGroup]="form" (ngSubmit)="onSendExpense()">
+    <div class="expense-form">
+        <div class="expense-form__form-group">
+            <label for="nature-select">{{_constant.nature}}*</label>
+            <select name="nature" id="nature-select" formControlName="nature" required="" (change)="natureChange($event)">
+                @for(nature of _natureContant; track nature.code){
+                    <option [value]="nature.code">{{nature.label}}</option>
+                }
+            </select>
+        </div>
+        <div class="expense-form__form-group">
+            <label for="amount-input">{{_constant.amount}}*</label>
+            <input [ngClass]="{'expense-form__error': (form.controls.amount.value === null  || form.controls.amount.invalid) && submit}" type="number" id="amount-input"  formControlName="amount" required=""/>
+            @if(form.controls.amount.value === null && submit){
+                <p class="expense-form__p-error">{{_filedRequired}}</p>
+            }  
+            @if(!(form.controls.amount.value === null) && form.controls.amount.invalid && submit){
+                <p class="expense-form__p-error">{{_fiedError}}</p>
+            }
+        </div>
+        <div class="expense-form__form-group">
+            <label for="comment-textarea">{{_constant.comment}}*</label>
+            <textarea [ngClass]="{'expense-form__error': (commentError || form.controls.comment.invalid) && submit}" id="comment-textarea"  formControlName="comment" required=""></textarea>
+            @if(commentError || form.controls.comment.invalid && submit){
+                <p class="expense-form__p-error">{{_filedRequired}}</p>
+            }
+        </div>
+        <div class="expense-form__form-group">
+            <label for="purchasedOn-input">{{_constant.purchasedOn}}*</label>
+            <input [ngClass]="{'expense-form__error':form.controls.purchasedOn.value === null && submit}" type="date"  formControlName="purchasedOn" required=""/>
+            @if(form.controls.purchasedOn.value === null && submit){
+                <p class="expense-form__p-error">{{_filedRequired}}</p>
+            }
+            @if(form.controls.purchasedOn.value !== null && form.controls.purchasedOn.invalid && submit){
+                <p class="expense-form__p-error">{{_fiedError}}</p>
+            }
+        </div>
+        @if(form.get('nature')?.value === 'trip'){
+            <div class="expense-form__form-group">
+                <label for="distance-input">{{_constant.distance}}</label>
+                <input [ngClass]="{'expense-form__error': (form.controls.distance.value === null || form.controls.distance.invalid) && submit}" type="number" id="distance-input"  formControlName="distance" required=""/>
+                @if((form.controls.distance.value === null) && submit){
+                    <p class="expense-form__p-error">{{_filedRequired}}</p>
+                }
+                @if(!(form.controls.distance.value === null) && form.controls.distance.invalid && submit){
+                    <p class="expense-form__p-error">{{_fiedError}}</p>
+                }
+            </div>
+        }   
+        @if(form.get('nature')?.value === 'restaurant'){
+            <div class="expense-form__form-group">
+                <label for="invite-input">{{_constant.invite}}</label>
+                <input [ngClass]="{'expense-form__error':(form.controls.invites.value === null  || form.controls.invites.invalid) && submit}" type="number" id="invite-input"  formControlName="invites" required=""/>
+                @if((form.controls.invites.value === null) && submit){
+                    <p class="expense-form__p-error">{{_filedRequired}}</p>
+                }
+                @if(!(form.controls.invites.value === null) && form.controls.invites.invalid && submit){
+                    <p class="expense-form__p-error">{{_fiedError}}</p>
+                }
+            </div>
+        }
+     
+    
+        <button type="submit">{{_constant.send}}</button>
+    </div>
+</form>
+

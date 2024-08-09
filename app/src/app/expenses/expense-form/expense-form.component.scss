@@ -1,0 +1,17 @@
+.expense-form {
+    display: flex;
+    flex-direction: column;
+    &__form-group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 10px;
+        height: 80px;
+    }
+    &__error {
+        border:1px solid red
+    }
+    &__p-error {
+       color: red;
+       margin: 0;
+    }
+}

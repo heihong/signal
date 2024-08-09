@@ -1,0 +1,22 @@
+<div class="pagination">
+    <nav [attr.aria-label]="_paginationContant.ariaLabel">
+        <ul class="pagination__ul">
+            <li><button [attr.aria-label]="_paginationContant.firstPage" class="pagination__button" (click)="changePage(1)" [disabled]="currentPageSignal()==1" ><<</button></li>
+            <li><button [attr.aria-label]="_paginationContant.previous" class="pagination__button" (click)="changePage(currentPageSignal()-1)" [disabled]="currentPageSignal()==1"><</button></li>
+                @for (page of arrayNbPages(); track page; let index = $index) {
+                    @if(index + 1 >=currentPageSignal() - 2 &&  index + 1 <= currentPageSignal() + 2){
+                        <li [ngClass]="{'pagination__active': currentPageSignal() === index + 1 }"><button  [attr.aria-label]="_paginationContant.firstPage" class="pagination__button" (click)="changePage(index + 1)">{{index + 1}}</button></li>
+                    }
+                  
+                }
+                @if(currentPageSignal() !== nbPages() && currentPageSignal() !== nbPages()-1 && currentPageSignal() !== nbPages() -2) {
+                    <li>...</li>
+                }
+                @if(currentPageSignal() !== nbPages() && currentPageSignal() !== nbPages()-1 && currentPageSignal() !== nbPages() -2) {
+                    <li><button [attr.aria-label]="_paginationContant.next " class="pagination__button" (click)="changePage(nbPages())">{{nbPages()}}</button></li>
+                }
+                <li><button [attr.aria-label]="_paginationContant.next " class="pagination__button" (click)="changePage(currentPageSignal() + 1)" [disabled]="currentPageSignal()==nbPages()">></button></li>
+                <li><button [attr.aria-label]="_paginationContant.lastPage " class="pagination__button" (click)="changePage(nbPages())" [disabled]="currentPageSignal()==nbPages()">>></button></li>
+        </ul>
+    </nav>
+</div>

@@ -1,0 +1,28 @@
+.expense-table {
+  height: 418px;
+  &__table{
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 100%;
+    
+  }
+  &__thead{
+    background-color: rgb(135, 199, 226);
+  }
+  &__th {
+    border: 1px solid black;
+    padding: 10px;
+    text-align: left; 
+  }
+    
+  &__td {
+    border: 1px solid black;
+    padding: 10px;
+    text-align: left;
+     
+  }
+
+  &--pointer {
+    cursor: pointer;
+  }
+}

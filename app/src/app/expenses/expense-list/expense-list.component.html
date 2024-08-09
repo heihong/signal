@@ -1,0 +1,9 @@
+<h1>{{_titleExpenseList}}</h1>
+<div>
+    <div class="margin-b">
+        <a routerLink="expense-add" >{{_addExpense}}</a>
+    </div>
+    <app-expense-table (newExpense)="editExpense($event)"></app-expense-table>
+    <app-pagination></app-pagination>
+</div>
+
