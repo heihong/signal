@@ -60,12 +60,12 @@ export class ExpenseAddComponent implements OnInit {
         invites: expense.invites,
       };
     }
-    this.expenseService.sendExpense(result as RestaurantI | TripI).subscribe(
-      () => this.router.navigate(['']),
-      (err) => this.router.navigate(['error'])
-    );
-
-    this.expenseService.setCurrentPageSignal(0);
-    this.expenseService.setCurrentPageSignal(1);
+    this.expenseService.sendExpense(result as RestaurantI | TripI).subscribe({
+     next: () => {
+       this.expenseService.reload();
+       this.router.navigate(['']);
+     },
+     error: () => this.router.navigate(['error'])
+    });
   }
 }

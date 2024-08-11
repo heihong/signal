@@ -29,6 +29,8 @@ describe('ExpenseAddComponent', () => {
   });
   describe('sendExpense', () => {
     it('should call sendExpense when nature = trip', () => {
+      const reloadDataSpy = spyOn(expenseServiceSpy, 'reload')
+
       let expense = {
         nature: 'trip',
         amount: 965,
@@ -36,15 +38,18 @@ describe('ExpenseAddComponent', () => {
         purchasedOn: '2022-05-12',
         distance: 988,
       };
-      spyOn(expenseServiceSpy, 'sendExpense').and.returnValue(of());
+      spyOn(expenseServiceSpy, 'sendExpense').and.returnValue(of({
+        items: [expense],
+        count: 1
+      }));
       spyOn(expenseServiceSpy, 'setCurrentPageSignal');
       component.sendExpense(expense);
       fixture.detectChanges();
       expect(expenseServiceSpy.sendExpense).toHaveBeenCalledWith(expense);
-      expect(expenseServiceSpy.setCurrentPageSignal).toHaveBeenCalledWith(1);
+      expect(reloadDataSpy).toHaveBeenCalled();
     });
 
-    it('should call setCurrentPageSignal when nature = restaurant', () => {
+    it('should send expense when nature = restaurant', () => {
       let expense = {
         nature: 'restaurant',
         amount: 965,
@@ -53,11 +58,9 @@ describe('ExpenseAddComponent', () => {
         invites: 988,
       };
       spyOn(expenseServiceSpy, 'sendExpense').and.returnValue(of());
-      spyOn(expenseServiceSpy, 'setCurrentPageSignal');
       component.sendExpense(expense);
       fixture.detectChanges();
       expect(expenseServiceSpy.sendExpense).toHaveBeenCalledWith(expense);
-      expect(expenseServiceSpy.setCurrentPageSignal).toHaveBeenCalledWith(1);
     });
   });
 });
