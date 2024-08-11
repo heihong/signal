@@ -21,14 +21,20 @@ describe('ExpenseEditComponent', () => {
       ExpenseService
     ) as jasmine.SpyObj<ExpenseService>;
     component = fixture.componentInstance;
-    component.expenseService.setExpenseSignal({
+    let expense = {
       id: 50,
       nature: 'trip',
       amount: 965,
       comment: 'Enim maioren.',
       purchasedOn: '2022-05-12',
       distance: 988,
+    };
+    component.expenseService.setExpenseSignal({
+      ...expense,
     });
+    component.expenseSignal = {
+      ...expense,
+    };
     fixture.detectChanges();
   });
 
@@ -37,7 +43,8 @@ describe('ExpenseEditComponent', () => {
   });
 
   describe('sendExpense', () => {
-    it('should call setExpenseSignal when nature = trip', () => {
+    it('should call sendExpense when nature = trip', () => {
+      const reloadDataSpy = spyOn(expenseServiceSpy, 'reload');
       let expense = {
         id: 50,
         nature: 'trip',
@@ -48,20 +55,25 @@ describe('ExpenseEditComponent', () => {
       };
 
       let result = {
+        id: 50,
         nature: expense.nature,
-        amount: expense.amount,
+        amount: 985,
         comment: expense.comment,
         purchasedOn: expense.purchasedOn,
         distance: expense.distance,
       };
-      spyOn(expenseServiceSpy, 'setExpenseSignal');
-      spyOn(expenseServiceSpy, 'editExpense').and.returnValue(of());
-      component.sendExpense(expense);
-      expect(expenseServiceSpy.setExpenseSignal).toHaveBeenCalledWith(expense);
+      spyOn(expenseServiceSpy, 'editExpense').and.returnValue(
+        of({ ...expense })
+      );
+      expenseServiceSpy.setExpenseSignal(expense);
+      component.sendExpense(result);
+      fixture.detectChanges();
       expect(expenseServiceSpy.editExpense).toHaveBeenCalledWith(result);
+      expect(reloadDataSpy).toHaveBeenCalled();
     });
 
     it('should call setExpenseSignal when nature = restaurant', () => {
+      const reloadDataSpy = spyOn(expenseServiceSpy, 'reload');
       let expense = {
         id: 50,
         nature: 'restaurant',
@@ -72,34 +84,22 @@ describe('ExpenseEditComponent', () => {
       };
 
       let result = {
+        id: 50,
         nature: expense.nature,
-        amount: expense.amount,
+        amount: 896,
         comment: expense.comment,
         purchasedOn: expense.purchasedOn,
         invites: expense.invites,
       };
-      spyOn(expenseServiceSpy, 'setExpenseSignal');
-      spyOn(expenseServiceSpy, 'editExpense').and.returnValue(of());
-      component.sendExpense(expense);
-      fixture.detectChanges();
-      expect(expenseServiceSpy.setExpenseSignal).toHaveBeenCalledWith(expense);
-      expect(expenseServiceSpy.editExpense).toHaveBeenCalledWith(result);
-    });
-  });
+      spyOn(expenseServiceSpy, 'editExpense').and.returnValue(
+        of({ ...expense })
+      );
 
-  describe('editExpense', () => {
-    it('should call setExpenseSignal when nature = restaurant', () => {
-      let expense = {
-        id: 50,
-        nature: 'restaurant',
-        amount: 965,
-        comment: 'Enim maioren.',
-        purchasedOn: '2022-05-12',
-        invites: 988,
-      };
-      spyOn(expenseServiceSpy, 'setExpenseSignal');
-      component.editExpense(expense);
-      expect(expenseServiceSpy.setExpenseSignal).toHaveBeenCalledWith(expense);
+      expenseServiceSpy.setExpenseSignal(expense);
+      component.sendExpense(result);
+      fixture.detectChanges();
+      expect(expenseServiceSpy.editExpense).toHaveBeenCalledWith(result);
+      expect(reloadDataSpy).toHaveBeenCalled();
     });
   });
 });

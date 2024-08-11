@@ -4,6 +4,7 @@ import { ExpenseAddComponent } from './expense-add.component';
 import { ExpenseService } from '../expense.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of } from 'rxjs';
+import e from 'express';
 
 describe('ExpenseAddComponent', () => {
   let component: ExpenseAddComponent;
@@ -29,7 +30,7 @@ describe('ExpenseAddComponent', () => {
   });
   describe('sendExpense', () => {
     it('should call sendExpense when nature = trip', () => {
-      const reloadDataSpy = spyOn(expenseServiceSpy, 'reload')
+      const reloadDataSpy = spyOn(expenseServiceSpy, 'reload');
 
       let expense = {
         nature: 'trip',
@@ -38,11 +39,9 @@ describe('ExpenseAddComponent', () => {
         purchasedOn: '2022-05-12',
         distance: 988,
       };
-      spyOn(expenseServiceSpy, 'sendExpense').and.returnValue(of({
-        items: [expense],
-        count: 1
-      }));
-      spyOn(expenseServiceSpy, 'setCurrentPageSignal');
+      spyOn(expenseServiceSpy, 'sendExpense').and.returnValue(
+        of({ ...expense })
+      );
       component.sendExpense(expense);
       fixture.detectChanges();
       expect(expenseServiceSpy.sendExpense).toHaveBeenCalledWith(expense);
@@ -50,6 +49,7 @@ describe('ExpenseAddComponent', () => {
     });
 
     it('should send expense when nature = restaurant', () => {
+      const reloadDataSpy = spyOn(expenseServiceSpy, 'reload');
       let expense = {
         nature: 'restaurant',
         amount: 965,
@@ -57,10 +57,13 @@ describe('ExpenseAddComponent', () => {
         purchasedOn: '2022-05-12',
         invites: 988,
       };
-      spyOn(expenseServiceSpy, 'sendExpense').and.returnValue(of());
+      spyOn(expenseServiceSpy, 'sendExpense').and.returnValue(
+        of({ ...expense })
+      );
       component.sendExpense(expense);
       fixture.detectChanges();
       expect(expenseServiceSpy.sendExpense).toHaveBeenCalledWith(expense);
+      expect(reloadDataSpy).toHaveBeenCalled();
     });
   });
 });

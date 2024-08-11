@@ -25,13 +25,11 @@ export class ExpenseEditComponent {
   expenseSignal = this.expenseService.expenseSignal();
 
   sendExpense(expense: RestaurantI | TripI) {
-    let expenseSignal = this.expenseService.expenseSignal();
-    let currentPage = this.expenseService.currentPageSignal;
-
     let result = null;
 
     if (expense.nature === this._tripConstant) {
       result = {
+        id: this.expenseSignal?.id,
         nature: expense.nature,
         amount: expense.amount,
         comment: expense.comment,
@@ -40,6 +38,7 @@ export class ExpenseEditComponent {
       };
     } else {
       result = {
+        id: this.expenseSignal?.id,
         nature: expense.nature,
         amount: expense.amount,
         comment: expense.comment,
@@ -47,22 +46,12 @@ export class ExpenseEditComponent {
         invites: expense.invites,
       };
     }
-    this.expenseService.setExpenseSignal({ ...expense, id: expenseSignal?.id });
-
-    this.expenseService.editExpense(result as RestaurantI | TripI).subscribe(
-      (x) => {
-        if (currentPage() === 1) {
-          this.expenseService.setCurrentPageSignal(0);
-          this.expenseService.setCurrentPageSignal(1);
-        }
+    this.expenseService.editExpense(result as RestaurantI | TripI).subscribe({
+      next: () => {
+        this.expenseService.reload();
         this.router.navigate(['']);
       },
-      (err) => this.router.navigate(['error'])
-    );
-  }
-
-  editExpense(expense: RestaurantI | TripI) {
-    let expenseSignal = this.expenseService.expenseSignal();
-    this.expenseService.setExpenseSignal({ ...expense, id: expenseSignal?.id });
+      error: () => this.router.navigate(['error']),
+    });
   }
 }
